@@ -3,10 +3,8 @@ import type { Metadata } from "next";
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
 export const metadata: Metadata = {
   title: "SUMAS-RMS | UNIVERSITY PORTAL",
   description: "SUMAS-RMS University Portal for Managing Student Records",
@@ -18,7 +16,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true" || true;
 
   return (
     <SidebarProvider

@@ -79,7 +79,7 @@ export default function Page() {
 					<CardHeader>
 						<CardTitle>Organization Invitation</CardTitle>
 						<CardDescription>
-							You've been invited to join an organization
+							You&apos;ve been invited to join an organization
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
@@ -92,7 +92,7 @@ export default function Page() {
 									Welcome to {invitation.organizationName}!
 								</h2>
 								<p className="text-center">
-									You've successfully joined the organization. We're excited to
+									You&apos;ve successfully joined the organization. We&apos;re excited to
 									have you on board!
 								</p>
 							</div>
@@ -187,7 +187,7 @@ function InvitationError() {
 			</CardHeader>
 			<CardContent>
 				<p className="mb-4 text-sm text-muted-foreground">
-					The invitation you're trying to access is either invalid or you don't
+					The invitation you&apos;re trying to access is either invalid or you don&apos;t
 					have the correct permissions. Please check your email for a valid
 					invitation or contact the person who sent it.
 				</p>

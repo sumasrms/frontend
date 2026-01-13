@@ -29,8 +29,9 @@ export default function Page() {
 					userCode,
 				});
 				router.push("/device/success");
-			} catch (err: any) {
-				setError(err.error?.message || "Failed to approve device");
+			} catch (err) {
+				const error = err as { error?: { message?: string } };
+				setError(error.error?.message || "Failed to approve device");
 			}
 		});
 	};
@@ -46,8 +47,9 @@ export default function Page() {
 					userCode,
 				});
 				router.push("/device/denied");
-			} catch (err: any) {
-				setError(err.error?.message || "Failed to deny device");
+			} catch (err) {
+				const error = err as { error?: { message?: string } };
+				setError(error.error?.message || "Failed to deny device");
 			}
 		});
 	};

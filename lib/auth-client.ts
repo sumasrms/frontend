@@ -1,7 +1,6 @@
 import { createAuthClient } from "better-auth/react";
 import {
   adminClient,
-  customSessionClient,
   deviceAuthorizationClient,
   lastLoginMethodClient,
   multiSessionClient,
@@ -15,13 +14,18 @@ export const authClient = createAuthClient({
   baseURL: "http://localhost:8000",
   plugins: [
     passkeyClient(),
-		lastLoginMethodClient(),
+    lastLoginMethodClient(),
     oneTapClient({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
       promptOptions: {
         maxAttempts: 1,
       },
     }),
+    deviceAuthorizationClient(),
+    multiSessionClient(),
+    twoFactorClient(),
+    adminClient(),
+    organizationClient(),
   ],
 });
 
@@ -36,3 +40,7 @@ const errorMessages: Record<string, string> = Object.fromEntries(
 export const getErrorMessage = (code: string): string => {
   return errorMessages[code] ?? "";
 };
+
+export type DeviceSession = Awaited<
+  ReturnType<typeof authClient.multiSession.listDeviceSessions>
+>["data"];

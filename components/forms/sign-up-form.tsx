@@ -190,6 +190,7 @@ export function SignUpForm({
 					<div className="flex items-end gap-4">
 						{imagePreview && (
 							<div className="relative w-16 h-16 rounded-sm overflow-hidden">
+								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img
 									src={imagePreview}
 									alt="Profile preview"

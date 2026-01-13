@@ -3,7 +3,6 @@
 import { Key } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { SignInForm } from "@/components/forms/sign-in-form";
 import { LastUsedIndicator } from "@/components/last-used-indicator";

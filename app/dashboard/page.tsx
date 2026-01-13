@@ -1,7 +1,7 @@
 import { authClient } from "@/lib/auth-client";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import UserCard from "./_components/user-card";
+import { DashboardStats } from "./_components/dashboard-stats";
 
 export default async function DashboardPage() {
   const { data: session } = await authClient.getSession({
@@ -14,8 +14,12 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className=" min-h-screen items-center justify-center">
-      
+    <div className="flex flex-1 flex-col">
+      <div className="@container/main flex flex-1 flex-col gap-2">
+        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+          <DashboardStats />
+        </div>
+      </div>
     </div>
   );
 }

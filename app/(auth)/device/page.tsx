@@ -35,10 +35,13 @@ export default function Page() {
 				if (response.data) {
 					router.push(`/device/approve?user_code=${finalCode}`);
 				}
-			} catch (err: any) {
-				setError(
-					err.error?.message || "Invalid code. Please check and try again.",
-				);
+			} catch (err: unknown) {
+				const errorObj = err as { error?: { message?: string } };
+				if (err && typeof err === "object" && "error" in err && typeof errorObj.error?.message === "string") {
+					setError(errorObj.error?.message || "Invalid code. Please check and try again.");
+				} else {
+					setError("Invalid code. Please check and try again.");
+				}
 			}
 		});
 	};

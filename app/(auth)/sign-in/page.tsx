@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import SignIn from "@/app/(auth)/sign-in/_components/sign-in";
-import { SignUp } from "@/app/(auth)/sign-in/_components/sign-up";
 import { Tabs } from "@/components/ui/tabs2";
 import { authClient } from "@/lib/auth-client";
 import { getCallbackURL } from "@/lib/shared";
@@ -25,7 +24,7 @@ export default function Page() {
 				},
 			},
 		});
-	}, []);
+	}, [params, router]);
 
 	return (
 		<div className="w-full">

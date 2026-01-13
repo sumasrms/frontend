@@ -15,7 +15,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { authClient, getErrorMessage } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -47,7 +47,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 	}
 	setLoading(true);
 
-	const { data, error } = await authClient.signIn.email({
+	const result = await authClient.signIn.email({
 		email: form.email,
 		password: form.password,
 		rememberMe: false,
