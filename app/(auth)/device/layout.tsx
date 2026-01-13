@@ -1,15 +1,12 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
 
 export default async function DevicePage({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	const session = await auth.api.getSession({
-		headers: await headers(),
-	});
+	const session = await authClient.getSession();
 	if (session === null) {
 		throw redirect("/sign-in?callbackUrl=/device");
 	}

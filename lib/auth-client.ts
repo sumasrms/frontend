@@ -10,8 +10,10 @@ import {
 } from "better-auth/client/plugins";
 import { passkeyClient } from "@better-auth/passkey/client";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export const authClient = createAuthClient({
-  baseURL: "http://localhost:8000",
+  baseURL: API_URL,
   plugins: [
     passkeyClient(),
     lastLoginMethodClient(),
