@@ -9,7 +9,7 @@ import type { PaginationParams, CreateResultInput, UpdateResultInput } from "@/l
 // Queries
 export const useResultsQuery = (params?: PaginationParams & { sessionId?: string; courseId?: string; studentId?: string }) => {
   return useQuery({
-    queryKey: resultKeys.list(params),
+    queryKey: resultKeys.list(params as Record<string, unknown>),
     queryFn: () => resultService.getResults(params),
   });
 };

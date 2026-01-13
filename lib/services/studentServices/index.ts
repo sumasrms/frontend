@@ -9,7 +9,7 @@ import type {
 
 export const studentService = {
   getStudents: (params?: PaginationParams) =>
-    api.get<PaginatedResponse<Student>>("/api/students", params),
+    api.get<PaginatedResponse<Student>>("/api/students", params as Record<string, string | number | boolean | null | undefined>),
 
   getStudent: (studentId: string) =>
     api.get<Student>(`/api/students/${studentId}`),

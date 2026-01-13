@@ -1,3 +1,4 @@
+import { oauthProviderClient } from "@better-auth/oauth-provider/client";
 import { createAuthClient } from "better-auth/react";
 import {
   adminClient,
@@ -9,6 +10,7 @@ import {
   twoFactorClient,
 } from "better-auth/client/plugins";
 import { passkeyClient } from "@better-auth/passkey/client";
+import { oidcProvider } from "better-auth/plugins";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -28,6 +30,7 @@ export const authClient = createAuthClient({
     twoFactorClient(),
     adminClient(),
     organizationClient(),
+    oauthProviderClient(),
   ],
 });
 

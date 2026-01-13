@@ -9,7 +9,7 @@ import type { PaginationParams, CreateCourseInput, UpdateCourseInput } from "@/l
 // Queries
 export const useCoursesQuery = (params?: PaginationParams & { department?: string; level?: number; semester?: number }) => {
   return useQuery({
-    queryKey: courseKeys.list(params),
+    queryKey: courseKeys.list(params as Record<string, unknown>),
     queryFn: () => courseService.getCourses(params),
   });
 };

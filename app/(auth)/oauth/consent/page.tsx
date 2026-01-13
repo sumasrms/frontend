@@ -1,3 +1,4 @@
+import { authClient } from "@/lib/auth-client";
 import {
 	ArrowLeftRight,
 	ArrowUpRight,
@@ -6,13 +7,12 @@ import {
 	User,
 } from "lucide-react";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
 import { ConsentBtns } from "./consent-buttons";
 
 export const metadata: Metadata = {
@@ -33,26 +33,18 @@ export default async function AuthorizePage({
 	searchParams,
 }: AuthorizePageProps) {
 	const { scope, client_id } = await searchParams;
-	const _headers = await headers();
-	const [session, clientDetails] = await Promise.all([
-		auth.api.getSession({
-			headers: _headers,
-		}),
-		auth.api.getOAuthClientPublic({
-			query: {
-				client_id,
-			},
-			headers: _headers,
+	const [{ data: session }, { data: clientDetails }] = await Promise.all([
+		authClient.getSession(),
+		authClient.oauth2.publicClient({
+			query: { client_id },
 		}),
 	]).catch(() => {
 		throw redirect("/sign-in");
 	});
 
-	const organization = session?.session?.activeOrganizationId
-		? await auth.api.getFullOrganization({
-				headers: _headers,
-			})
-		: undefined;
+	const { data: organization } = session?.session?.activeOrganizationId
+		? await authClient.organization.getFullOrganization()
+		: { data: undefined };
 
 	return (
 		<div className="container mx-auto py-10">
@@ -63,7 +55,7 @@ export default async function AuthorizePage({
 				<div className="flex flex-col items-center justify-center max-w-2xl mx-auto px-4">
 					<div className="flex items-center gap-8 mb-8">
 						<div className="w-16 h-16 border rounded-full flex items-center justify-center">
-							{clientDetails.logo_uri ? (
+							{clientDetails?.logo_uri ? (
 								<Image
 									src={clientDetails.logo_uri}
 									alt="App Logo"
@@ -89,7 +81,7 @@ export default async function AuthorizePage({
 					</div>
 
 					<h1 className="text-3xl font-semibold text-center mb-8">
-						{clientDetails.client_name} is requesting access to your Better Auth
+						{clientDetails?.client_name} is requesting access to your Better Auth
 						account
 					</h1>
 
@@ -104,7 +96,7 @@ export default async function AuthorizePage({
 							</div>
 							<div className="flex flex-col gap-1">
 								<div className="text-lg mb-4">
-									Continuing will allow Sign in with {clientDetails.client_name}{" "}
+									Continuing will allow Sign in with {clientDetails?.client_name}{" "}
 									to:
 								</div>
 								{scope.includes("profile") && (

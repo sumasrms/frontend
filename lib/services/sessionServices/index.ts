@@ -8,7 +8,7 @@ import type {
 
 export const sessionService = {
   getSessions: (params?: PaginationParams) =>
-    api.get<PaginatedResponse<AcademicSession>>("/api/sessions", params),
+    api.get<PaginatedResponse<AcademicSession>>("/api/sessions", params as Record<string, string | number | boolean | null | undefined>),
 
   getSession: (sessionId: string) =>
     api.get<AcademicSession>(`/api/sessions/${sessionId}`),

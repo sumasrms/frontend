@@ -17,7 +17,7 @@ export const useAdminStatsQuery = () => {
 
 export const useAdminUsersQuery = (params?: PaginationParams & AdminUserFilters) => {
   return useQuery({
-    queryKey: adminKeys.usersList(params),
+    queryKey: adminKeys.usersList(params as Record<string, unknown>),
     queryFn: () => adminService.getUsers(params),
   });
 };
@@ -32,7 +32,7 @@ export const useAdminUserQuery = (userId: string) => {
 
 export const useAuditLogsQuery = (params?: PaginationParams & AuditLogFilters) => {
   return useQuery({
-    queryKey: adminKeys.auditLogsList(params),
+    queryKey: adminKeys.auditLogsList(params as Record<string, unknown>),
     queryFn: () => adminService.getAuditLogs(params),
   });
 };

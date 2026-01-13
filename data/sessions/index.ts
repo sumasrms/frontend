@@ -9,7 +9,7 @@ import type { PaginationParams, CreateAcademicSessionInput } from "@/lib/types";
 // Queries
 export const useAcademicSessionsQuery = (params?: PaginationParams) => {
   return useQuery({
-    queryKey: sessionKeys.list(params),
+    queryKey: sessionKeys.list(params as Record<string, unknown>),
     queryFn: () => sessionService.getSessions(params),
   });
 };

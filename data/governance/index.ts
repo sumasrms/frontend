@@ -10,13 +10,14 @@ import type {
   UpdateFacultyInput,
   CreateDepartmentInput,
   UpdateDepartmentInput,
+  CreateGradeScaleInput,
 } from "@/lib/types";
 
 // ============ FACULTY QUERIES ============
 
 export const useFacultiesQuery = (params?: PaginationParams) => {
   return useQuery({
-    queryKey: governanceKeys.facultyList(params),
+    queryKey: governanceKeys.facultyList(params as Record<string, unknown>),
     queryFn: () => governanceService.getFaculties(params),
   });
 };
@@ -107,7 +108,7 @@ export const useAssignDeanMutation = () => {
 
 export const useDepartmentsQuery = (params?: PaginationParams & { facultyId?: string }) => {
   return useQuery({
-    queryKey: governanceKeys.departmentList(params),
+    queryKey: governanceKeys.departmentList(params as Record<string, unknown>),
     queryFn: () => governanceService.getDepartments(params),
   });
 };
@@ -205,7 +206,7 @@ export const useAddGradeScalesMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ departmentId, data }: { departmentId: string; data: Record<string, unknown> }) =>
+    mutationFn: ({ departmentId, data }: { departmentId: string; data: CreateGradeScaleInput }) =>
       governanceService.addGradeScales(departmentId, data),
     onSuccess: (_, { departmentId }) => {
       queryClient.invalidateQueries({ queryKey: governanceKeys.department(departmentId) });
