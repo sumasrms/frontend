@@ -6,6 +6,7 @@ import { authClient } from "@/lib/auth-client";
 export default async function GovernancePage() {
   const { data: session } = await authClient.getSession();
     if (!session) {
+      console.log({session})
       redirect("/");
     }
   
