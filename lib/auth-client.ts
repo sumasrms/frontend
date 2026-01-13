@@ -12,7 +12,10 @@ import {
 import { passkeyClient } from "@better-auth/passkey/client";
 import { oidcProvider } from "better-auth/plugins";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL =
+  typeof window === "undefined"
+    ? process.env.NEXT_PUBLIC_API_URL // Server side: hit backend directly
+    : ""; // Client side: hit relative path (proxy)
 
 export const authClient = createAuthClient({
   baseURL: API_URL,
