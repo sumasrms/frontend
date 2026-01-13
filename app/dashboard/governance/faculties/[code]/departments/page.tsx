@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { useFacultyByCodeQuery } from "@/data/governance";
 import { Button } from "@/components/ui/button";
@@ -14,11 +14,23 @@ import { DepartmentCard, DepartmentCardSkeleton } from "@/components/admin/Depar
 import { CreateDepartmentDialog } from "@/components/admin/CreateDepartmentDialog";
 import type { Department } from "@/lib/types";
 
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+
 export default function FacultyDepartmentsPage({
   params,
 }: {
   params: Promise<{ code: string }>;
 }) {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/");
+    }
+  }, [session, isPending, router]);
+
   const { code } = use(params);
   const { data: faculty, isLoading, error } = useFacultyByCodeQuery(code);
   const [createDepartmentOpen, setCreateDepartmentOpen] = useState(false);

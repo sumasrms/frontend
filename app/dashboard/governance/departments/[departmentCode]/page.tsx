@@ -1,10 +1,11 @@
 "use client";
 
-import { use, useState, useTransition } from "react";
+import { use, useState, useTransition, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth-client";
 import { 
   useDepartmentByCodeQuery, 
   useAssignHODMutation, 
@@ -93,6 +94,14 @@ export default function DepartmentDetailPage({
 }) {
   const { departmentCode } = use(params);
   const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/");
+    }
+  }, [session, isPending, router]);
+
   const queryClient = useQueryClient();
   // Ensure useDepartmentByCodeQuery matches the one exported in data/governance
   const { data: department, isLoading, error } = useDepartmentByCodeQuery(departmentCode);

@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 import { useDepartmentsQuery, useDepartmentStatsQuery } from "@/data/governance";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,6 +19,15 @@ import { CreateDepartmentDialog } from "@/components/admin/CreateDepartmentDialo
 import { DepartmentCard, DepartmentCardSkeleton } from "@/components/admin/DepartmentCard";
 
 export default function DepartmentsPage() {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/");
+    }
+  }, [session, isPending, router]);
+
   const { data, isLoading, error } = useDepartmentsQuery({ page: 1, limit: 50 });
   const { data: stats, isLoading: statsLoading } = useDepartmentStatsQuery();
   const [createDepartmentOpen, setCreateDepartmentOpen] = useState(false);

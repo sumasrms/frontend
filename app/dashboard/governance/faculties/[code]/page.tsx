@@ -1,11 +1,12 @@
 "use client";
 
-import { use, useState, useTransition } from "react";
+import { use, useState, useTransition, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFacultyByCodeQuery, useAssignDeanMutation } from "@/data/governance";
+import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -81,6 +82,8 @@ function FacultyDetailSkeleton() {
   );
 }
 
+// function FacultyDetailSkeleton is above
+
 export default function FacultyDetailPage({
   params,
 }: {
@@ -88,10 +91,20 @@ export default function FacultyDetailPage({
 }) {
   const { code } = use(params);
   const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/");
+    }
+  }, [session, isPending, router]);
+
   const { data: faculty, isLoading, error } = useFacultyByCodeQuery(code);
   
   const [assignDeanOpen, setAssignDeanOpen] = useState(false);
+  // ... rest of state variables
+
   const [selectedDean, setSelectedDean] = useState<string | undefined>();
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);

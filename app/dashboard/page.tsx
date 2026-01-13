@@ -1,17 +1,8 @@
-import { authClient } from "@/lib/auth-client";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { requireAuth } from "@/lib/auth-guards";
 import { DashboardStats } from "./_components/dashboard-stats";
 
 export default async function DashboardPage() {
-  const { data: session } = await authClient.getSession({
-    fetchOptions: {
-      headers: await headers(),
-    },
-  });
-  if (!session) {
-    redirect("/sign-in");
-  }
+  await requireAuth();
 
   return (
     <div className="flex flex-1 flex-col">
