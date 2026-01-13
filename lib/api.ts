@@ -29,7 +29,7 @@ class ApiError extends Error {
 // Create Axios instance with default config
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, // Always send cookies
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },

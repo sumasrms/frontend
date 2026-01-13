@@ -5,6 +5,7 @@ import { createMetadata } from "@/lib/metadata";
 import Header from "@/components/header";
 import Providers from "@/components/providers";
 import { BackgroundRippleEffect } from "@/components/background-ripple-effect";
+import Image from "next/image";
 
 export const metadata: Metadata = createMetadata({
   title: {
@@ -39,6 +40,12 @@ export default function RootLayout({
           <div className="min-h-[calc(100vh-3.5rem)] mt-14 w-full relative">
             <Header />
             <div className="absolute inset-0 z-0">
+              <Image
+                src="/sumas-gate.png"
+                alt="Hero Background"
+                fill
+                className="object-cover opacity-10"
+              />
               <BackgroundRippleEffect />
             </div>
             <div className="relative z-10 ">
