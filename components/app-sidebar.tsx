@@ -100,8 +100,8 @@ const menuConfig: MenuSection[] = [
         icon: GraduationCap,
       },
       {
-        title: "Staff",
-        url: "/dashboard/staff",
+        title: "Staffs",
+        url: "/dashboard/staffs",
         icon: Users,
       },
       {
@@ -253,7 +253,7 @@ export function AppSidebar() {
 
   // Initialize with active parent key based on current path
   const initialOpenKey = findActiveParentKey(menuConfig, currentPath);
-  
+
   // Accordion state - only one submenu open at a time
   const [openKey, setOpenKey] = useState<string | null>(initialOpenKey);
 

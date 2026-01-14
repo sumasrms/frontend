@@ -40,7 +40,18 @@ export interface User {
   twoFactorEnabled?: boolean;
 }
 
-export type UserRole = "ADMIN" | "STAFF" | "STUDENT" | "FACULTY_DEAN" | "HOD" | "SENATE" | "LECTURER" | "NON_TEACHING_STAFF" | "admin" | "staff" | "student";
+export type UserRole =
+  | "ADMIN"
+  | "STAFF"
+  | "STUDENT"
+  | "FACULTY_DEAN"
+  | "HOD"
+  | "SENATE"
+  | "LECTURER"
+  | "NON_TEACHING_STAFF"
+  | "admin"
+  | "staff"
+  | "student";
 
 // Faculty types
 export interface Faculty {
@@ -179,30 +190,87 @@ export interface UpdateStudentInput {
 }
 
 // Staff types
+export type EmploymentType =
+  | "FULL_TIME"
+  | "PART_TIME"
+  | "CONTRACT"
+  | "VISITING";
+
 export interface Staff {
   id: string;
   userId: string;
-  staffId: string;
-  department: string;
-  faculty: string;
-  position: string;
-  user?: User;
+  staffNumber: string;
+  departmentCode: string;
+  position?: string | null;
+  specialization?: string | null;
+  employmentType: EmploymentType;
+  dateJoined?: Date | string | null;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    image?: string | null;
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string | null;
+  };
+  department?: Department;
+  courses?: Course[];
   createdAt: Date | string;
   updatedAt: Date | string;
+  _count?: {
+    courses: number;
+  };
 }
 
 export interface CreateStaffInput {
-  userId: string;
-  staffId: string;
-  department: string;
-  faculty: string;
-  position: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  staffNumber: string;
+  departmentCode: string;
+  position?: string;
+  specialization?: string;
+  employmentType?: EmploymentType;
+  dateJoined?: string;
+  phoneNumber?: string;
 }
 
 export interface UpdateStaffInput {
-  department?: string;
-  faculty?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  staffNumber?: string;
+  departmentCode?: string;
   position?: string;
+  specialization?: string;
+  employmentType?: EmploymentType;
+  dateJoined?: string;
+  phoneNumber?: string;
+}
+
+export interface StaffStats {
+  total: number;
+  byEmploymentType: Array<{
+    _count: number;
+    employmentType: EmploymentType;
+  }>;
+  byDepartment: Array<{
+    _count: number;
+    departmentId: string;
+  }>;
+}
+
+export interface BulkUploadResult {
+  success: boolean;
+  totalProcessed: number;
+  successCount: number;
+  failureCount: number;
+  errors?: Array<{
+    row: number;
+    field?: string;
+    message: string;
+  }>;
 }
 
 // Course types
@@ -210,33 +278,62 @@ export interface Course {
   id: string;
   code: string;
   title: string;
-  creditUnits: number;
-  department: string;
-  faculty: string;
+  credits: number;
+  departmentId: string;
   level: number;
-  semester: 1 | 2;
+  semester: "FIRST" | "SECOND";
+  academicYear: string;
+  description?: string;
+  isActive: boolean;
+  instructors?: Instructor[];
   createdAt: Date | string;
   updatedAt: Date | string;
+  _count?: {
+    students: number;
+  };
+}
+
+export interface Instructor {
+  id: string;
+  courseId: string;
+  instructorId: string;
+  isPrimary: boolean;
+  instructor?: {
+    id: string;
+    userId: string;
+    staffNumber: string;
+    user: {
+      name: string;
+      image?: string | null;
+      email: string;
+    };
+  };
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export interface CreateCourseInput {
-  code: string;
   title: string;
-  creditUnits: number;
-  department: string;
-  faculty: string;
+  code: string;
+  description?: string;
+  credits: number;
+  departmentId: string;
   level: number;
-  semester: 1 | 2;
+  semester: "FIRST" | "SECOND";
+  academicYear: string;
+  isActive?: boolean;
 }
 
 export interface UpdateCourseInput {
-  code?: string;
   title?: string;
-  creditUnits?: number;
-  department?: string;
-  faculty?: string;
+  code?: string;
+  description?: string;
+  credits?: number;
+  departmentId?: string;
   level?: number;
-  semester?: 1 | 2;
+  semester?: "FIRST" | "SECOND";
+  academicYear?: string;
+  isActive?: boolean;
 }
 
 // Academic Session types

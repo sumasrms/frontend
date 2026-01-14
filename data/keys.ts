@@ -27,6 +27,7 @@ export const courseKeys = {
   list: (params?: Record<string, unknown>) => [...courseKeys.lists(), params] as const,
   details: () => [...courseKeys.all(), "detail"] as const,
   detail: (courseId: string) => [...courseKeys.details(), courseId] as const,
+  byCode: (code: string) => [...courseKeys.details(), "by-code", code] as const,
   students: (courseId: string, sessionId: string) => [...courseKeys.detail(courseId), "students", sessionId] as const,
 };
 
@@ -67,4 +68,15 @@ export const governanceKeys = {
   departmentList: (params?: Record<string, unknown>) => [...governanceKeys.departments(), "list", params] as const,
   department: (departmentId: string) => [...governanceKeys.departments(), departmentId] as const,
   departmentByCode: (code: string) => [...governanceKeys.departments(), "by-code", code] as const,
+};
+
+// Staff query keys
+export const staffKeys = {
+  all: () => ["staff"] as const,
+  lists: () => [...staffKeys.all(), "list"] as const,
+  list: (params?: Record<string, unknown>) => [...staffKeys.lists(), params] as const,
+  details: () => [...staffKeys.all(), "detail"] as const,
+  detail: (id: string) => [...staffKeys.details(), id] as const,
+  stats: () => [...staffKeys.all(), "stats"] as const,
+  courses: (id: string) => [...staffKeys.detail(id), "courses"] as const,
 };
