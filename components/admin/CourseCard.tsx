@@ -146,12 +146,12 @@ export function CourseCard({ course }: CourseCardProps) {
           {/* Instructors */}
           <div className="pt-2 border-t mt-2">
             {course.instructors && course.instructors.length > 0 ? (
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-3 overflow-hidden">
+              <div className="flex items-center gap-3 ">
+                <div className="flex -space-x-3 overflow-hidden p-1">
                   {course.instructors.map((instructorData) => (
                     <Avatar
                       key={instructorData.id}
-                      className={`h-8 w-8 ring-2 ring-background inline-block ${
+                      className={`h-8 w-8 ring-2 ring-transparent inline-block ${
                         instructorData.isPrimary ? "ring-primary z-10" : "z-0"
                       }`}
                     >
@@ -204,8 +204,11 @@ export function CourseCard({ course }: CourseCardProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete {course.code} - {course.title}. This
-              action cannot be undone.
+              This will permanently delete{" "}
+              <strong className="font-semibold text-destructive">
+                {course.code} - {course.title}
+              </strong>
+              . This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

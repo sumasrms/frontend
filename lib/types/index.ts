@@ -38,6 +38,7 @@ export interface User {
   studentId?: string | null;
   lastLogin?: string | null;
   twoFactorEnabled?: boolean;
+  gender?: Gender;
 }
 
 export type UserRole =
@@ -161,32 +162,50 @@ export interface Level {
 }
 
 // Student types
+export type StudentStatus =
+  | "ACTIVE"
+  | "SUSPENDED"
+  | "GRADUATED"
+  | "WITHDRAWN"
+  | "DEFERRED";
+export type Gender = "MALE" | "FEMALE" | "OTHER";
+
 export interface Student {
   id: string;
   userId: string;
   matricNumber: string;
-  department: string;
-  faculty: string;
   level: number;
+  admissionDate?: string;
+  graduationDate?: string;
+  status: StudentStatus;
   cgpa?: number;
+  departmentId: string;
+  programId?: string | null;
   user?: User;
+  department?: Department;
   createdAt: Date | string;
   updatedAt: Date | string;
 }
 
 export interface CreateStudentInput {
-  userId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
   matricNumber: string;
-  department: string;
-  faculty: string;
+  departmentId: string;
   level: number;
+  gender: Gender;
+  phoneNumber?: string;
+  admissionDate?: string;
+  graduationDate?: string;
+  status?: StudentStatus;
 }
 
-export interface UpdateStudentInput {
-  department?: string;
-  faculty?: string;
-  level?: number;
-  cgpa?: number;
+export type UpdateStudentInput = Partial<CreateStudentInput>;
+
+export interface BulkPromoteInput {
+  studentIds: string[];
+  newLevel: number;
 }
 
 // Staff types

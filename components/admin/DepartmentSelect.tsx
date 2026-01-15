@@ -45,7 +45,7 @@ export function DepartmentSelect({
 
   const selectedDepartment = React.useMemo(() => {
     if (!value || !data?.data) return undefined;
-    return data.data.find((dept) => dept.code === value);
+    return data.data.find((dept) => dept.id === value);
   }, [value, data]);
 
   return (
@@ -71,7 +71,7 @@ export function DepartmentSelect({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0">
+      <PopoverContent className="w-[400px] p-0 shadow-xl border-none ring-1 ring-border">
         <Command>
           <CommandInput
             placeholder="Search departments..."
@@ -86,7 +86,7 @@ export function DepartmentSelect({
               {data?.data.map((department) => (
                 <CommandItem
                   key={department.id}
-                  value={department.code}
+                  value={department.id}
                   onSelect={() => {
                     onSelect(department);
                     setOpen(false);
@@ -95,7 +95,7 @@ export function DepartmentSelect({
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === department.code ? "opacity-100" : "opacity-0"
+                      value === department.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   <div className="flex flex-col">

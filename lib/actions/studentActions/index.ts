@@ -1,40 +1,117 @@
 "use server";
 
-import { api, ApiError } from "@/lib/api";
-import type { Student, CreateStudentInput, UpdateStudentInput } from "@/lib/types";
+import { revalidatePath } from "next/cache";
+import { studentService } from "@/lib/services/studentServices";
+import {
+  CreateStudentInput,
+  UpdateStudentInput,
+  BulkPromoteInput,
+} from "@/lib/types";
 
 export async function createStudentAction(data: CreateStudentInput) {
   try {
-    const student = await api.post<Student>("/api/students", data);
+    const student = await studentService.createStudent(data);
+    revalidatePath("/dashboard/students");
     return { success: true, data: student };
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return { success: false, error: error.message, errors: error.errors };
-    }
-    return { success: false, error: "Failed to create student" };
+  } catch (error: unknown) {
+    const err = error as any;
+    return {
+      success: false,
+      error: err.message || "Failed to create student",
+      errors: err.errors,
+    };
   }
 }
 
-export async function updateStudentAction(studentId: string, data: UpdateStudentInput) {
+export async function updateStudentAction(
+  id: string,
+  data: UpdateStudentInput
+) {
   try {
-    const student = await api.patch<Student>(`/api/students/${studentId}`, data);
+    const student = await studentService.updateStudent(id, data);
+    revalidatePath("/dashboard/students");
+    revalidatePath(`/dashboard/students/${student.matricNumber}`);
     return { success: true, data: student };
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return { success: false, error: error.message, errors: error.errors };
-    }
-    return { success: false, error: "Failed to update student" };
+  } catch (error: unknown) {
+    const err = error as any;
+    return {
+      success: false,
+      error: err.message || "Failed to update student",
+      errors: err.errors,
+    };
   }
 }
 
-export async function deleteStudentAction(studentId: string) {
+export async function deleteStudentAction(id: string) {
   try {
-    await api.delete<{ success: boolean }>(`/api/students/${studentId}`);
+    await studentService.deleteStudent(id);
+    revalidatePath("/dashboard/students");
     return { success: true };
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return { success: false, error: error.message };
+  } catch (error: unknown) {
+    const err = error as any;
+    return {
+      success: false,
+      error: err.message || "Failed to delete student",
+    };
+  }
+}
+
+export async function promoteStudentAction(id: string, level: number) {
+  try {
+    await studentService.promoteStudent(id, level);
+    revalidatePath("/dashboard/students");
+    return { success: true };
+  } catch (error: unknown) {
+    const err = error as any;
+    return {
+      success: false,
+      error: err.message || "Failed to promote student",
+    };
+  }
+}
+
+export async function updateStudentStatusAction(id: string, status: string) {
+  try {
+    await studentService.updateStatus(id, status);
+    revalidatePath("/dashboard/students");
+    return { success: true };
+  } catch (error: unknown) {
+    const err = error as any;
+    return {
+      success: false,
+      error: err.message || "Failed to update student status",
+    };
+  }
+}
+
+export async function bulkPromoteAction(data: BulkPromoteInput) {
+  try {
+    await studentService.bulkPromote(data);
+    revalidatePath("/dashboard/students");
+    return { success: true };
+  } catch (error: unknown) {
+    const err = error as any;
+    return {
+      success: false,
+      error: err.message || "Failed to promote students",
+    };
+  }
+}
+
+export async function bulkUploadStudentsAction(formData: FormData) {
+  try {
+    const file = formData.get("file") as File;
+    if (!file) {
+      return { success: false, error: "No file provided" };
     }
-    return { success: false, error: "Failed to delete student" };
+    await studentService.bulkUpload(file);
+    revalidatePath("/dashboard/students");
+    return { success: true };
+  } catch (error: unknown) {
+    const err = error as any;
+    return {
+      success: false,
+      error: err.message || "Failed to upload students",
+    };
   }
 }
